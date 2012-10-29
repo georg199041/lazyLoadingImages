@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="cleartype" content="on"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no"/>
+
+    <!-- Blackberry and etc. -->
+    <meta http-equiv="cleartype" content="on"/>
+    <meta name="HandheldFriendly" content="True"/>
+
+    <!-- iPhone -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link rel="apple-touch-startup-image" href="./images/startup.png">
+    <link rel="apple-touch-icon" href="./images/custom_icon.png"/>
+    <link rel="apple-touch-icon" href="./images/touch-icon-iphone.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="./images/touch-icon-ipad.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="./images/touch-icon-iphone4.png"/>
+
+    <!-- IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=IE9,chrome=1"/>
+    <!--[if IE]>
+    <meta http-equiv="imagetoolbar" content="no"/>
+    <![endif]-->
+
+    <!-- Android and etc. -->
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="address=no"/>
+
+    <!-- SEO -->
+    <title>Lazy loading images</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content="Alexey Bakhirev"/>
+
+    <link href="./images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+
+    <!-- Default style -->
+    <link href="css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="css/default.css" rel="stylesheet" type="text/css"/>
+
+    <!--[if gte IE 9]>
+    <style type="text/css">
+        .gradient {
+            filter: none;
+        }
+    </style>
+    <![endif]-->
+
+    <link type="text/css" href="css/index.css" rel="stylesheet"/>
+    <script defer src="js/lazyLoadingImages.min.js"></script>
+    <script>
+        function showDemo(node) {
+            var demo = document.getElementById("demoDebag");
+            var hasClass = demo.getAttribute("class");
+            if(hasClass && hasClass == "hidden") {
+                demo.setAttribute("class", "");
+            } else {
+                demo.setAttribute("class", "hidden");
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="content">
+    <h1>Отложенная загрузка картинок.</h1>
+
+
+    <h2>Демо</h2>
+
+    <p>
+        Откройте дебагер и сбрость кэш вашего браузера для наглядности примера.
+    </p>
+
+    <div class="table demo">
+        <div class="tr">
+            <div class="td"><img src="./images/empty.png" url="./images/1200.jpg"/></div>
+            <div class="td"><input type="button" value="Загрузить без групп" onClick="lazyLoadingImages.load()"></div>
+            <div class="td"><input type="button" value="Показать без групп" onClick="lazyLoadingImages.show()"></div>
+        </div>
+        <div class="tr">
+            <div class="td">
+                <img src="./images/empty.png" url="./images/1201.jpg" type="1"/>
+            </div>
+            <div class="td"><input type="button" value="Загрузить группу 1" onClick="lazyLoadingImages.load('1')"></div>
+            <div class="td"><input type="button" value="Показать группу 1" onClick="lazyLoadingImages.show('1')"></div>
+        </div>
+        <div class="tr">
+            <div class="td">
+                <img src="./images/empty.png" url="./images/1202.jpg" type="2"/>
+                <img src="./images/empty.png" url="./images/1203.jpg" type="2"/>
+            </div>
+            <div class="td"><input type="button" value="Загрузить группу 2" onClick="lazyLoadingImages.load('2')"></div>
+            <div class="td"><input type="button" value="Показать группу 2" onClick="lazyLoadingImages.show('2')"></div>
+        </div>
+    </div>
+    <a href="javascript:showDemo(this)">показать скриншот дебагера</a>
+    <img src="./images/demo.png" alt="Отложенная загрузка группы картинок 2"
+         title="Отложенная загрузка группы картинок 2" id="demoDebag" class="hidden"/>
+
+    <h2>Оглавление</h2>
+    <ul>
+        <li><a href="#when">Когда нужен скрипт</a></li>
+        <li><a href="#what">Как это работает</a></li>
+        <li><a href="#use">Использование</a></li>
+        <li><a href="#interface">Интерфейс</a></li>
+        <li><a href="#advantages">Преимущества</a></li>
+        <li><a href="#which">Где может быть использовано</a></li>
+    </ul>
+    <a name="when"><h2>Когда нужен скрипт:</h2></a>
+    <ul>
+        <li>У вас сложный сайт?</li>
+        <li>Подгружаете информацию ajax`ом?</li>
+        <li>Много верстки, которая может быть не показа пользователю?</li>
+    </ul>
+
+    <p>Используя скрипт отложенной загрузки картинок, вы можете догружать контент по мере необходимости, тем самым
+        уменьшая нагрузку на сервер и ускоряя работу сайта для пользователя.
+    </p>
+
+    <a name="what"><h2>Как это работает:</h2></a>
+    <ol>
+        <li>У вас есть некая скрытая страница с картинками.</li>
+        <li>Вместо них грузиться изображение в 1px.</li>
+        <li>Скрипт пробегает по всем картинкам, разделяя их на группы.</li>
+        <li>Если у вас есть свободное время без нагрузки - вы можете скриптом подгрузить картинки определенной группы
+            (если
+        <li>предполагаете, что скоро они могут понадобиться пользователю).</li>
+        <li>Если пользователь запросил вашу скрытую страницу - вы показываете картинки.</li>
+        <li>Если вы указали неправильный адрес картинки - она просто оставит вашу заглушку в 1px и не будет менять
+            изображение.
+        </li>
+    </ol>
+    <a name="use"><h2>Использование:</h2></a>
+
+    <p>
+        В заголовок страницы вставьте:
+        <code>
+            &#60;script defer src="js/lazyLoadingImages.min.js">&#60;/script>
+        </code>
+        Картинки в документе описывать таким образом:
+        <code>
+            &#60;img
+            <span class="red">src="./images/empty.png"</span>
+            <span class="green">url="./images/1200.jpg"</span>
+            <span class="blue">type="1"</span> />
+        </code>
+        Где:
+    </p>
+    <ul>
+        <li><span class="red">src="./images/empty.png"</span> - адрес картинки заглушки размером в 1px</li>
+        <li><span class="green">url="./images/1200.jpg"</span> - адрес оригинальной большой картинки</li>
+        <li><span class="blue">type="1"</span> - ID группы, необязательный параметр</li>
+    </ul>
+
+
+    <a name="interface"><h2>Интерфейс</h2></a>
+
+    <p>
+        По событию DOMContentLoaded (окончание загрузки DOM) глобальному объекту, проброшенному в модуль присваивается
+        метод lazyLoadingImages (по умолчанию это window.lazyLoadingImages).
+    </p>
+
+    <div class="table code">
+        <div class="tr">
+            <div class="td">lazyLoadingImages.update()</div>
+            <div class="td">&mdash; обновит список картинок и запомнит их url для загрузки оригинальных изображений.
+                Этот метод вызывается автоматически, при инициализации модуля.
+            </div>
+        </div>
+        <div class="tr">
+            <div class="td">lazyLoadingImages.load(type)</div>
+            <div class="td">&mdash; загрузит картинки определенной группы (параметр type указывает какой
+                именно). Параметр type - необязательный. По умолчанию загружает картинки, которым ID группы не задан.
+            </div>
+        </div>
+        <div class="tr">
+            <div class="td">lazyLoadingImages.show(type)</div>
+            <div class="td">&mdash; показать картинки определенной группы (параметр type указывает какой именно).
+                Параметр type - необязательный. По умолчанию показывает картинки, которым ID группы не задан.
+            </div>
+        </div>
+    </div>
+
+    <a name="advantages"><h2>Преимущества:</h2></a>
+    <ol>
+        <li>Модуль написан на нативном JavaScript.</li>
+        <li>Для его работы не нужны никакие библиотеки.</li>
+        <li>Сжат с помощью Google Compressor.</li>
+        <li>Поддерживает паттерн цепочек. То есть методы можно вызывать так:
+            <code>
+                lazyLoadingImages.show("1").load("2").load("3");
+            </code>
+            (показать картинки первой группы и подгрузить в фоне картинки груп 2 и 3)
+        </li>
+    </ol>
+
+
+    <a name="which"><h2>Где может быть использовано:</h2></a>
+
+    <p>
+        В сложных проектах с ajax`ом, когда важна скорость рендеринга страницы и ведется работа над &laquo;предугадыванием&raquo;
+        действий пользователя.
+    </p>
+
+    <div class="autor">
+        29.10.2012<br>
+        Alexey Bakhirev<br>
+        alexey-bakhirev@yandex.ru<br>
+        bakhirev.livejournal.com
+    </div>
+
+
+</div>
+
+
+<div color="red">&nbsp;</div>
+
+<!--[if lt IE 7 ]>
+<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+<script>window.attachEvent('onload', function() {
+    CFInstall.check({mode: 'overlay'})
+})</script>
+<![endif]-->
+</body>
+</html>

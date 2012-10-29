@@ -1,0 +1,64 @@
+.content {
+    width: 70%;
+    margin: 1em auto;
+    line-height: 1.2em;
+    font-size: 13px;
+
+}
+
+.content code {
+    display: block;
+    padding: 1em;
+    border: 1px solid #AAA;
+    background: #F9F9F9;
+    margin: 1em 0;
+}
+
+.content h2 {
+    margin: 1em 0 0.5em 0;
+}
+
+.table.code > .tr > .td {
+    vertical-align: top;
+    text-align: left;
+    padding: 1em 0;
+}
+
+.table.code > .tr > .td:first-child {
+    width: 15em;
+}
+
+.content ul li {
+    list-style-type: none;
+}
+
+.table.demo > .tr > .td:first-child {
+    width: 60%;
+}
+
+.table.demo img {
+    width: auto;
+    height: 50px;
+    border: 1px solid #AAA;
+}
+
+.table.demo > .tr:nth-child(2n + 2) {
+    background: #f0f0f0;
+}
+.autor {
+    text-align: right;
+    color: #DDD;
+
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.blue {
+    color: blue;
+}
