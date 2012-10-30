@@ -29,6 +29,7 @@
 				"type": type || false,
 				"image": null,
 				"isLoad": false,
+				"isShow": false,
 				"callback": null,
 				"offset": node.offsetTop
 			};
@@ -36,16 +37,17 @@
 		},
 		"showImage": function(index) {
 			var obj = this.images[index];
-			obj.isLoad = true;
 			obj.node.src = obj.image.src;
+			obj.isLoad = true;
+			obj.isShow = true;
 		},
 		"load": function(type) {
 			this.loadAndShow(type, false);
 		},
 		"addCallback": function(obj, i) {
-			var parent = this;
+			var self = this;
 			var callback = (function(index) {
-				parent.showImage(index);
+				self.showImage(index);
 			})(i);
 			obj.callback = true;
 			utils.addEvent(obj.image, "load", callback);
@@ -62,7 +64,10 @@
 				if(obj.image) {
 					if(makeVisible) {
 						if(obj.isLoad) {
-							obj.node.src = obj.image.src;
+							if(!obj.isShow) {
+								obj.node.src = obj.image.src;
+								obj.isShow = true;
+							}
 						} else if(!obj.callback) {
 							self.addCallback(obj, i);
 						}
@@ -70,6 +75,7 @@
 				} else {
 					obj.image = new Image();
 					obj.image.src = obj.url;
+					obj.isShow = true;
 					if(makeVisible) {
 						self.addCallback(obj, i);
 					}
