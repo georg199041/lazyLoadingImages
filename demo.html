@@ -54,6 +54,7 @@
 
     <link type="text/css" href="css/index.css" rel="stylesheet"/>
     <script defer src="js/lazyLoadingImages.min.js"></script>
+    <!--<script defer src="source/lazyLoadingImages.js"></script>-->
     <script>
         function showDemo(node) {
             var demo = document.getElementById("demoDebag");
@@ -100,7 +101,18 @@
             <div class="td"><input type="button" value="Показать группу 2" onClick="lazyLoadingImages.show('2')"></div>
         </div>
     </div>
-    <a href="javascript:showDemo(this)">показать скриншот дебагера</a>
+
+    <div class="table">
+        <div class="tr">
+            <div class="td">
+                <input type="button" value="Показывать группу 4 по мере скролла"
+                       onClick="lazyLoadingImages.onScroll('4')">
+            </div>
+        </div>
+    </div>
+
+
+    <a href="javascript:showDemo(this)">показать скриншот дебагера</a><br>
     <img src="./images/demo.png" alt="Отложенная загрузка группы картинок 2"
          title="Отложенная загрузка группы картинок 2" id="demoDebag" class="hidden"/>
 
@@ -111,6 +123,7 @@
         <li><a href="#use">Использование</a></li>
         <li><a href="#interface">Интерфейс</a></li>
         <li><a href="#advantages">Преимущества</a></li>
+        <li><a href="#problem">Недостатки</a></li>
         <li><a href="#which">Где может быть использовано</a></li>
     </ul>
     <a name="when"><h2>Когда нужен скрипт:</h2></a>
@@ -137,6 +150,17 @@
             изображение.
         </li>
     </ol>
+    <br>
+    <img src="./images/empty.png" data-url="./images/1204.jpg" data-type="4" class="preview"/>
+
+    <div class="table">
+        <div class="tr">
+            <div class="td">
+                <input type="button" value="Остановить предзагрузку группы 4 по мере скролла"
+                       onClick="lazyLoadingImages.offScroll('4')">
+            </div>
+        </div>
+    </div>
     <a name="use"><h2>Использование:</h2></a>
 
     <p>
@@ -159,7 +183,8 @@
         <li><span class="blue">data-type="1"</span> - ID группы, необязательный параметр</li>
     </ul>
 
-
+    <br>
+    <img src="./images/empty.png" data-url="./images/1205.jpg" data-type="4" class="preview"/>
     <a name="interface"><h2>Интерфейс</h2></a>
 
     <p>
@@ -176,14 +201,29 @@
         </div>
         <div class="tr">
             <div class="td">lazyLoadingImages.load(type)</div>
-            <div class="td">&mdash; загрузит картинки определенной группы (параметр type указывает какой
-                именно). Параметр type - необязательный. По умолчанию загружает картинки, которым ID группы не задан.
+            <div class="td">&mdash; загрузит картинки определенной группы (необязательный параметр type указывает какой
+                именно). По умолчанию загружает картинки, которым ID группы не задан.
             </div>
         </div>
         <div class="tr">
             <div class="td">lazyLoadingImages.show(type)</div>
-            <div class="td">&mdash; показать картинки определенной группы (параметр type указывает какой именно).
-                Параметр type - необязательный. По умолчанию показывает картинки, которым ID группы не задан.
+            <div class="td">&mdash; показать картинки определенной группы (необязательный параметр type указывает какой
+                именно).
+                По умолчанию показывает картинки, которым ID группы не задан.
+            </div>
+        </div>
+        <div class="tr">
+            <div class="td">lazyLoadingImages.onScroll(type)</div>
+            <div class="td">&mdash; показать картинки определенной группы (необязательный параметр type указывает какой
+                именно) при прокрутке страницы (а именно начать подгрузку изображения, когда до него останется "пол
+                экрана"). По умолчанию показывает картинки, которым ID группы не задан.
+            </div>
+        </div>
+        <div class="tr">
+            <div class="td">lazyLoadingImages.offScroll(type)</div>
+            <div class="td">&mdash; отменяет показ картинки определенной группы (необязательный параметр type указывает
+                какой именно) при прокрутке страницы (см. метод выше). По умолчанию сбрасывает onScroll картинкам,
+                которым ID группы не задан.
             </div>
         </div>
     </div>
@@ -199,18 +239,32 @@
             </code>
             (показать картинки первой группы и подгрузить в фоне картинки груп 2 и 3)
         </li>
+        <li>При желание можно пробросить в модуль ссылку на ваш объект или переменную и уйти от создания ещё одной
+            глобальной переменной.
+        </li>
     </ol>
+    <br>
+    <img src="./images/empty.png" data-url="./images/1206.jpg" data-type="4" class="preview"/>
 
-
+    <a name="problem"><h2>Недостатки:</h2></a>
+    <ol>
+        <li>Проблема с индексацией картинок, т.к. URL отличается от оригинала</li>
+        <li>Проблема с сохранением страницы, т.к. картинки тянуться динамически</li>
+    </ol>
+    <br>
+    <p>
+        Но, если речь идет о контенте создаваемым ajax подгрузкой данных - то эти два недостатка будут и при обычном
+        способе загрузки. Как способ решения может быть использование микроформатов и формата
+        <a href=="http://schema.org/" target="_blank">schema.org</a>
+    </p>
     <a name="which"><h2>Где может быть использовано:</h2></a>
-
     <p>
         В сложных проектах с ajax`ом, когда важна скорость рендеринга страницы и ведется работа над &laquo;предугадыванием&raquo;
         действий пользователя.
     </p>
 
     <div class="autor">
-        29.10.2012<br>
+        31.10.2012<br>
         Alexey Bakhirev<br>
         alexey-bakhirev@yandex.ru<br>
         bakhirev.livejournal.com
@@ -221,7 +275,8 @@
 
 
 <div color="red">&nbsp;</div>
-
+<img src="./images/empty.png" url="http://img-fotki.yandex.ru/get/6620/122481518.7/0_9289d_c6c19378_orig" type="1"
+     id="bigdif"/>
 <!--[if lt IE 7 ]>
 <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
 <script>window.attachEvent('onload', function() {

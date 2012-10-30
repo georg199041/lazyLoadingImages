@@ -1,5 +1,5 @@
 (function(global) {
-	global = ((global) ? global : window);
+	global = global || window;
 
 	var utils = {
 		addEvent: function(element, eventName, callback) {
@@ -14,6 +14,12 @@
 	var lazyLoadingImages = {
 		"node": {},
 		"images": [],
+		"scroll": {
+			"type": [],
+			"on": false,
+			"timer": null,
+			"event": false
+		},
 		"addImage": function(node, url, id) {
 			var type = node.getAttribute("data-type");
 			var obj = {
@@ -21,9 +27,10 @@
 				"node": node,
 				"url": url,
 				"type": type || false,
-				"image": false,
+				"image": null,
 				"isLoad": false,
-				"callback": false
+				"callback": null,
+				"offset": node.offsetTop
 			};
 			this.images.push(obj);
 		},
@@ -43,26 +50,28 @@
 			obj.callback = true;
 			utils.addEvent(obj.image, "load", callback);
 		},
-		"loadAndShow": function(type, makeVisible) {
+		"loadAndShow": function(type, makeVisible, isScroll) {
 			type = type || false;
-			var parent = this;
-			var arrayImages = this.images;
-			for (var i = 0, l = arrayImages.length; i < l; i++) {
-				var obj = arrayImages[i];
+			isScroll = isScroll || false;
+			var self = this,
+				obj = null;
+			for (var i = 0, l = self.images.length; i < l; i++) {
+				obj = self.images[i];
 				if(obj.type != type) continue;
+				if(isScroll && obj.offset > self.getRealScroll()) continue;
 				if(obj.image) {
 					if(makeVisible) {
 						if(obj.isLoad) {
 							obj.node.src = obj.image.src;
 						} else if(!obj.callback) {
-							parent.addCallback(obj, i);
+							self.addCallback(obj, i);
 						}
 					}
 				} else {
 					obj.image = new Image();
 					obj.image.src = obj.url;
 					if(makeVisible) {
-						parent.addCallback(obj, i);
+						self.addCallback(obj, i);
 					}
 				}
 			}
@@ -71,12 +80,12 @@
 			this.loadAndShow(type, true);
 		},
 		"update": function() {
-			var parent = this;
-			var listRealId = [];
+			var parent = this,
+				listRealId = [];
 			for (var i = 0, l = document.images.length; i < l; i++) {
 				var node = document.images[i];
-				var url = node.getAttribute("data-url");
-				var lazyId = node.getAttribute("data-lazyId");
+				var url = node.getAttribute("data-url"),
+					lazyId = node.getAttribute("data-lazyId");
 				if(!lazyId && url && url != "") {
 					var id = Math.ceil(Math.random() * 10000);
 					node.setAttribute("lazyId", id);
@@ -87,8 +96,8 @@
 			parent.removeUnrealObj(listRealId);
 		},
 		"removeUnrealObj": function(listRealId) {
-			var parent = this;
-			var arrayRealObject = [];
+			var parent = this,
+				arrayRealObject = [];
 			for (var i = 0, l = parent.images.length; i < l; i++) {
 				var obj = parent.images[i];
 				if(parent.isRealObject(obj, listRealId)) arrayRealObject.push(obj);
@@ -100,6 +109,45 @@
 				if(obj.id == listRealId[i]) return true;
 			}
 			return false;
+		},
+		"getIndexInArray": function(arrayElements, value) {
+			for (var i = 0, l = arrayElements.length; i < l; i++) if(arrayElements[i] == value) return i;
+			return false;
+		},
+		"onScroll": function(type) {
+			type = type || false;
+			var self = this;
+			var types = self.scroll.type;
+			var index = self.getIndexInArray(types, type || false);
+			if(!index && index !== 0) types.push(type);
+			self.inspectScroll();
+			if(!self.scroll.event) {
+				self.scroll.event = true;
+				utils.addEvent(document, "scroll", function() {
+					self.inspectScroll();
+				});
+			}
+		},
+		"offScroll": function(type) {
+			type = type || false;
+			var self = this;
+			var types = self.scroll.type;
+			var index = self.getIndexInArray(types, type || false);
+			if(index || index === 0) types.splice(index, 1);
+		},
+		"getRealScroll": function() {
+			var scrollTop = window.pageYOffset ? window.pageYOffset : (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop),
+				windowHeight = document.documentElement.clientHeight * 1.5;
+			return (scrollTop + windowHeight);
+		},
+		"inspectScroll": function() {
+			var self = this;
+			var arrayElements = self.scroll.type,
+				callback = function() {
+					for (var i = 0, l = arrayElements.length; i < l; i++) self.loadAndShow(arrayElements[i], true, true);
+				};
+			clearInterval(self.scroll.timer);
+			self.scroll.timer = setTimeout(callback, 100);
 		}
 	};
 
@@ -114,6 +162,14 @@
 		},
 		"load": function(type) {
 			lazyLoadingImages.load.call(lazyLoadingImages, type);
+			return global.lazyLoadingImages;
+		},
+		"onScroll": function(type) {
+			lazyLoadingImages.onScroll.call(lazyLoadingImages, type);
+			return global.lazyLoadingImages;
+		},
+		"offScroll": function(type) {
+			lazyLoadingImages.offScroll.call(lazyLoadingImages, type);
 			return global.lazyLoadingImages;
 		}
 	};
