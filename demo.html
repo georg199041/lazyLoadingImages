@@ -80,21 +80,21 @@
 
     <div class="table demo">
         <div class="tr">
-            <div class="td"><img src="./images/empty.png" url="./images/1200.jpg"/></div>
+            <div class="td"><img src="./images/empty.png" data-url="./images/1200.jpg"/></div>
             <div class="td"><input type="button" value="Загрузить без групп" onClick="lazyLoadingImages.load()"></div>
             <div class="td"><input type="button" value="Показать без групп" onClick="lazyLoadingImages.show()"></div>
         </div>
         <div class="tr">
             <div class="td">
-                <img src="./images/empty.png" url="./images/1201.jpg" type="1"/>
+                <img src="./images/empty.png" data-url="./images/1201.jpg" data-type="1"/>
             </div>
             <div class="td"><input type="button" value="Загрузить группу 1" onClick="lazyLoadingImages.load('1')"></div>
             <div class="td"><input type="button" value="Показать группу 1" onClick="lazyLoadingImages.show('1')"></div>
         </div>
         <div class="tr">
             <div class="td">
-                <img src="./images/empty.png" url="./images/1202.jpg" type="2"/>
-                <img src="./images/empty.png" url="./images/1203.jpg" type="2"/>
+                <img src="./images/empty.png" data-url="./images/1202.jpg" data-type="2"/>
+                <img src="./images/empty.png" data-url="./images/1203.jpg" data-type="2"/>
             </div>
             <div class="td"><input type="button" value="Загрузить группу 2" onClick="lazyLoadingImages.load('2')"></div>
             <div class="td"><input type="button" value="Показать группу 2" onClick="lazyLoadingImages.show('2')"></div>
@@ -148,15 +148,15 @@
         <code>
             &#60;img
             <span class="red">src="./images/empty.png"</span>
-            <span class="green">url="./images/1200.jpg"</span>
-            <span class="blue">type="1"</span> />
+            <span class="green">data-url="./images/1200.jpg"</span>
+            <span class="blue">data-type="1"</span> />
         </code>
         Где:
     </p>
     <ul>
         <li><span class="red">src="./images/empty.png"</span> - адрес картинки заглушки размером в 1px</li>
-        <li><span class="green">url="./images/1200.jpg"</span> - адрес оригинальной большой картинки</li>
-        <li><span class="blue">type="1"</span> - ID группы, необязательный параметр</li>
+        <li><span class="green">data-url="./images/1200.jpg"</span> - адрес оригинальной большой картинки</li>
+        <li><span class="blue">data-type="1"</span> - ID группы, необязательный параметр</li>
     </ul>
 
 

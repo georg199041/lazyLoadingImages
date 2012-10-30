@@ -15,7 +15,7 @@
 		"node": {},
 		"images": [],
 		"addImage": function(node, url, id) {
-			var type = node.getAttribute("type");
+			var type = node.getAttribute("data-type");
 			var obj = {
 				"id": id,
 				"node": node,
@@ -75,8 +75,8 @@
 			var listRealId = [];
 			for (var i = 0, l = document.images.length; i < l; i++) {
 				var node = document.images[i];
-				var url = node.getAttribute("url");
-				var lazyId = node.getAttribute("lazyId");
+				var url = node.getAttribute("data-url");
+				var lazyId = node.getAttribute("data-lazyId");
 				if(!lazyId && url && url != "") {
 					var id = Math.ceil(Math.random() * 10000);
 					node.setAttribute("lazyId", id);
